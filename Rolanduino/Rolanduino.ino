@@ -188,7 +188,14 @@ void process_scan()
       if (last_note_0_time != 0 && synth.getDelayCount() - last_note_0_time > 20000)
       {
         if (!selection_mode)
+        {
           Serial.println("Selection mode");
+
+          // If Note 0 is playing a continuous note (e.g. an organ)
+          // turn it off now, so we can hear the selection notes.
+          synth.midiNoteOff(1, key_offset);
+        }
+
         selection_mode = new_inst = true;
 
         // If in selection mode we are always playing a note from the
@@ -211,12 +218,12 @@ void process_scan()
         }
       }
 
-      // If no change then there is nothing more to do
+      // If no change in the keys, then there is nothing more to do
       if (bit_pair == last_bit_pair)
         continue;
 
       // A key has been pressed and the PM line is low.
-      // Remember the tick count both per note ad globally.
+      // Remember the tick count both per note and globally.
       // We have to handle repeated 01 -> 00 transitions
       // without going back to 11 (key fully released)
       if (bit_pair == 0b01)

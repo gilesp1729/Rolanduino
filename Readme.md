@@ -42,7 +42,7 @@ I 3D-printed a carrier to mount the Mega on the original standoffs inside the pi
 
 ## The program
 
-My [library fork](https://github.com/gilesp1729/midi-sound-library) is responsible for making waves via PWM. It relies heavily on Timers 0, 1 and 2. The scanning code simply reads ports and gets interrupted a lot, so it needs to be robust against missing key presses. Since there is no UI, instrument selection is via the keyboard by holding down the very bottom note. While holding, playing any other note will select an instrument from the synth's internal table. Not all of them produce unique or correct sounds and these have been skipped. The percussion have also been skipped for now.
+My [library fork](https://github.com/gilesp1729/midi-sound-library) is responsible for making waves via PWM. It relies heavily on Timers 0, 1 and 2. The scanning code simply reads ports and gets interrupted a lot, so it needs to be robust against missing key presses. Since there is no UI, instrument selection is via the keyboard by holding down the very bottom note. While holding, playing any other note will select an instrument from the synth's internal table. Not all of them produce unique or correct sounds and have been (or will be) skipped. The percussion have also been skipped for now.
 
 The instruments are arranged as follows by octave:
 
@@ -67,3 +67,5 @@ Deleting more duplicate and non-working instruments from the selection interface
 Wiring audio outputs to existing power amp (once I can find the inputs; the PCB is quite different from the one in the manual)
 
 Organising a power supply for the Mega and tidying up piano case.
+
+Connecting up, and writing code to handle, the three standard piano pedals (soft, sostenuto and sustain)
