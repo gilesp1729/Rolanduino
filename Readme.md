@@ -42,7 +42,7 @@ I 3D-printed a carrier to mount the Mega on the original standoffs inside the pi
 
 ## The program
 
-My [library fork](https://github.com/gilesp1729/midi-sound-library) is responsible for making waves via PWM. It relies heavily on Timers 0, 1 and 2. The scanning code simply reads ports and gets interrupted a lot, so it needs to be robust against missing key presses. Since there is no UI, instrument selection is via the keyboard by holding down the very bottom note. While holding, playing any other note will select an instrument from the synth's internal table. Not all of them produce unique or correct sounds and have been (or will be) skipped. The percussion have also been skipped for now.
+My [library fork](https://github.com/gilesp1729/midi-sound-library) is responsible for making waves via PWM. It relies heavily on Timers 0, 1 and 2. The scanning code simply reads ports and gets interrupted a lot, so it needs to be robust against missing key presses. Since there is no UI, instrument selection is via the keyboard by holding down the very bottom note. While holding, playing any other note (white keys only) will select an instrument from the synth's internal table. Not all of them produce unique or correct sounds and have been (or will be) skipped. The percussion have also been skipped for now (only tuned percussion like timpani and xylophones are included)
 
 The instruments are arranged as follows by octave:
 
@@ -50,11 +50,13 @@ The instruments are arranged as follows by octave:
             -------------------------------------------------------------------------------
  Midi note  | 24       | 36       | 48        | 60       | 72       | 84       | 96       |
  Octave     | C1       | C2       | C3        | C4       | C5       | C6       | C7       |
-            | Organs   | Brass    | Woodwinds | Pianos   | Pianos   | Strings  | Effects  |
+            | Organs   | Brass    | Woodwinds | Pianos   | Perc.    | Strings  | Effects  |
             -------------------------------------------------------------------------------
- Synth inst     16-23      56-67      68-77      0-15                  24-46       52-55
+ Synth inst     16-23      56-67      68-77      0-15      various      24-46       52-55
    (from instruments_generated.h)
 ```
+
+The instrument template provided can be stuck on above the keys (it’s sized to suit my keyboard but they are pretty standard). Comments in the code describe the actual instruments used in each section.
 
 When in selection mode, the note you hear will always be in the Middle C octave.
 
@@ -63,6 +65,8 @@ The examples directory also contains a simple test program (scandump) for scanni
 ## To be continued
 
 Deleting more duplicate and non-working instruments from the selection interface.
+
+Implementing the volume control in software.
 
 Wiring audio outputs to existing power amp (once I can find the inputs; the PCB is quite different from the one in the manual)
 

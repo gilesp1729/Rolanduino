@@ -49,12 +49,13 @@
 //            ----------------------------------------------------------------------------------
 // Midi note  | 24       | 36       | 48        | 60       | 72       | 84       | 96      108 |
 // Octave     | C1       | C2       | C3        | C4       | C5       | C6       | C7       C8 |
-//            | Organs   | Brass    | Woodwinds | Pianos   | Pianos   | Strings  | Effects     |
+//            | Organs   | Brass    | Woodwinds | Pianos   | Perc.    | Strings  | Effects/vol |
 //            ----------------------------------------------------------------------------------
 // Synth inst     16-23      56-67      68-77      0-15                  24-46       52-55
 //   (from instruments_generated.h)
 
 // When in selection mode, the note you hear will always be in the Middle C octave.
+// The last two keys provide an overall volume control.
 
 
 #include <stdint.h>
@@ -100,7 +101,7 @@ static bool selection_mode = false;
 static uint32_t last_note_0_time = 0;
 
 // The selection table is indexed by keyboard note (0-88) and maps
-// to a synth instrument number. If an entry is -1 no new selection
+// to a synth instrument number. If an entry is negative, no new selection
 // will be made.
 
 // Octaves of the selection table
@@ -109,24 +110,31 @@ int selection[88] =
   // Unused notes at bottom of keyboard
   -1, -1, -1,
 
+// C       D       E   F       G        A       B
   // C1 octave: Organs
-  16, 17, 18, 19, 20, 21, 22, 23, -1,-1, -1, -1,
+  16, -1, 19, -1, 21, 22, -1, 23, -1, -1, -1, -1,
+  //16, 17, 18, 19, 20, 21, 22, 23, -1, -1, -1, -1,
 
   // C2 octave: Brass
-  56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67,
+  56, -1, 57, -1, 58, 60, -1, 62, -1, 65, -1, -1,
+  //56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67,
 
   // C3 octave: Woodwinds
-  68, 69, 70, 71, 72, 73, 74, 75, 76, 77, -1, -1,
+  68, -1, 69, -1, 70, 71, -1, 73, -1, 78, -1, 79,
+  //68, 69, 70, 71, 72, 73, 74, 75, 76, 77, -1, -1,
 
   // C4  and C5 octave: Pianos and related keyoards
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-  12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1,   // Too much - try and get back an octave for strings
+   0, -1,  4, -1,  6,  7, -1,  8, -1, -1, -1, -1,
+
+  // C5 octave: Tuned percussion
+  47, -1,  9, -1, 11, 12, -1, 13, -1, -1, -1, -1,
 
   // C6 octave: Strings
-  24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,  // we've run out of space here
+  40, -1, 42, -1, 43, 44, -1, 45, -1, 46, -1, -1,
 
   // C7 octave: Special effects (voice ooh/ahh sounds)
-  52, 53, 54, 55, -1, -1, -1, -1, -1, -1, -1, -1,
+  // and volume control (-2 for down, -3 for up)
+  52, -1, 53, -1, 54, 55, -1, -1, -1, -2, -1, -3,
 
   // That final C8
   -1
@@ -208,8 +216,9 @@ void process_scan()
           int middle_c = 60 - key_offset;
 
           // Look up the instrument from the table. An entry of -1
-          // will not play or select anything.
-          if (selection[note] == -1)
+          // will not play or select anything. An entry of -2 or -3
+          // controls the volume.
+          if (selection[note] < 0)
             continue;
           inst = selection[note];
 
@@ -309,6 +318,8 @@ void process_scan()
         {
           last_note_0_time = 0;
           selection_mode = new_inst = false;
+          curr_inst = inst;
+          inst = 0;
           Serial.println("Selection mode exited");
         }
       }
