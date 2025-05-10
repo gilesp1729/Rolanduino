@@ -62,14 +62,22 @@ When in selection mode, the note you hear will always be in the Middle C octave.
 
 The examples directory also contains a simple test program (scandump) for scanning the keyboard using approximately the same scanning logic.
 
+## Connecting the audio signals
+
+Since Roland pianos vary in their circuit boards there’s no guarantee this will reflect other models. The audio should always be able to be injected at the top of the existing volume control pot.
+
+Here are the Roland’s amp/jack board and power supply/power amp board.
+
+![](media/a1a0b410081476d2ed6d7adf720403e1.jpeg)
+
+The volume pot connects to this connector on the jack board. Injecting a 1kHz square wave from a scope produced a loud squawk when connected to the top of the pot. Cutting off these wires and connecting to the Mega’s audio circuit completed the audio section.
+
+![](media/670073f35a4112b461a3af5c0dfaf350.jpeg)
+
+There will also likely be a regulated 5V supply somewhere on the Roland’s amp board, but I’m not using that to power the Arduino as it is not recommended to drive the 5V pin directly. To be safe I’ll use a mains powered USB charger connected to the switched mains on the Roland’s power transformer, keeping all the mains stuff covered and out of the way.
+
 ## To be continued
 
 Deleting more duplicate and non-working instruments from the selection interface.
-
-Implementing the volume control in software.
-
-Wiring audio outputs to existing power amp (once I can find the inputs; the PCB is quite different from the one in the manual)
-
-Organising a power supply for the Mega and tidying up piano case.
 
 Connecting up, and writing code to handle, the three standard piano pedals (soft, sostenuto and sustain)

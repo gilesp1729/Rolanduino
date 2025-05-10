@@ -333,10 +333,11 @@ void process_scan()
 
 void setup(void)
 {
-  // We are dumping, so set the serial port up.
-  Serial.begin(9600);
-  while (!Serial)
-    ;
+  // We are dumping, so set the serial port up. Comment out when running from
+  //external power without the serial monitor.
+  //Serial.begin(9600);
+  //while (!Serial)
+  //  ;
 
   // Use DDR register to set all bits of the port to OUTPUT.
   DDRF = 0xFF;    // set port F to all output
