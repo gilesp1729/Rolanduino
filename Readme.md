@@ -62,6 +62,10 @@ When in selection mode, the note you hear will always be in the Middle C octave.
 
 The examples directory also contains a simple test program (scandump) for scanning the keyboard using approximately the same scanning logic.
 
+## Library dependencies
+
+Midi sound library [here](https://github.com/gilesp1729/midi-sound-library).
+
 ## Connecting the audio signals
 
 Since Roland pianos vary in their circuit boards there’s no guarantee this will reflect other models. The audio should always be able to be injected at the top of the existing volume control pot.

@@ -222,7 +222,9 @@ void process_scan()
             continue;
           inst = selection[note];
 
-          // Modify the note to be in the Middle C octave.
+          // Modify the note to be in the Middle C octave. Remember this
+          // modified note so we can turn it off later (in case note 0 is
+          // released first)
           note = middle_c + key;
         }
       }
@@ -287,9 +289,9 @@ void process_scan()
         }
 
         notes[note].playing = true;
-        vel = 170 - (ticks >> 4);   // approximate mapping to 32-127
-        if (vel < 32)
-          vel = 32;
+        vel = 178 - (ticks >> 4);   // approximate mapping to 16-127
+        if (vel < 16)
+          vel = 16;
          else if (vel > 127)
           vel = 127;
 
@@ -313,11 +315,12 @@ void process_scan()
         //Serial.println(note + key_offset);
         synth.midiNoteOff(1, note + key_offset);
 
-        // Note 0 has been released; turn off selection mode.
+        // Note 0 has been released; turn off selection mode and all notes.
         if (note == 0)
         {
           last_note_0_time = 0;
           selection_mode = new_inst = false;
+          synth.midiControlChange(1, 0x7B, 0);    // all notes off
           curr_inst = inst;
           inst = 0;
           Serial.println("Selection mode exited");
